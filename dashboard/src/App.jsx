@@ -399,41 +399,130 @@ function App() {
 
       {/* Telemetry Dashboard Modal */}
       <Modal isOpen={isAnalyticsOpen} onClose={() => setIsAnalyticsOpen(false)} title="Operational Telemetry">
-        <div className="p-24 space-y-24 h-full">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 h-full items-center">
-            <GoogleCard className="p-16 bg-white/[0.01] flex flex-col h-[700px] border-white/[0.03] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)]">
-              <div className="flex items-center justify-between border-b border-white/5 pb-10">
-                <h3 className="text-[12px] font-black uppercase tracking-[0.5em] text-google-blue flex items-center space-x-4">
-                  <Globe2 className="w-6 h-6 leading-none" />
-                  <span>Cluster Origin Density</span>
-                </h3>
+        <div className="p-16 space-y-16">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+            <GoogleCard className="md:col-span-7 p-12 bg-white/[0.01] flex flex-col h-[600px] border-white/[0.03] shadow-2xl overflow-hidden group">
+              <div className="flex items-center justify-between border-b border-white/5 pb-8 mb-8">
+                <div className="space-y-1">
+                  <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-google-blue flex items-center space-x-3">
+                    <Globe2 className="w-5 h-5" />
+                    <span>Jurisdictional Origin Density</span>
+                  </h3>
+                  <p className="text-[9px] font-bold text-white/20 uppercase tracking-widest pl-8">Global Node Concentration Meta</p>
+                </div>
+                <div className="flex items-center space-x-3 bg-google-blue/10 px-4 py-1.5 rounded-full border border-google-blue/20">
+                  <Activity className="w-3 h-3 text-google-blue animate-pulse" />
+                  <span className="text-[9px] font-black text-google-blue uppercase tracking-widest leading-none mt-0.5">Live Logic Feed</span>
+                </div>
               </div>
-              <div className="flex-1 mt-10">
+
+              <div className="flex-1 relative">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={stats.geo_distribution} innerRadius={120} outerRadius={180} paddingAngle={8} dataKey="value">
+                    <Pie
+                      data={stats.geo_distribution}
+                      innerRadius={110}
+                      outerRadius={160}
+                      paddingAngle={6}
+                      dataKey="value"
+                      stroke="none"
+                    >
                       {stats.geo_distribution?.map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={['#4285F4', '#34A853', '#EA4335', '#FBBC05', '#5F6368'][index % 5]} />
+                        <Cell key={`cell-${index}`} fill={['#4285F4', '#34A853', '#EA4335', '#FBBC05', '#5F6368'][index % 5]} className="hover:opacity-80 transition-opacity cursor-pointer outline-none" />
                       ))}
                     </Pie>
-                    <ChartTooltip contentStyle={{ backgroundColor: '#121212', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '32px', padding: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }} itemStyle={{ fontWeight: 'black', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.1em' }} />
+                    <ChartTooltip
+                      contentStyle={{ backgroundColor: '#171717', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '16px', boxShadow: '0 20px 40px rgba(0,0,0,0.8)' }}
+                      itemStyle={{ fontWeight: '900', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em' }}
+                    />
                   </PieChart>
                 </ResponsiveContainer>
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-1">Total Nodes</p>
+                  <p className="text-4xl font-bold tracking-tighter text-white">{stats.geo_distribution?.length || 0}</p>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-8 border-t border-white/5 grid grid-cols-2 md:grid-cols-4 gap-6">
+                {stats.geo_distribution?.slice(0, 4).map((d, i) => (
+                  <div key={i} className="flex flex-col space-y-2 group/item">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: ['#4285F4', '#34A853', '#EA4335', '#FBBC05'][i % 4] }} />
+                      <span className="text-[9px] font-black text-white/40 uppercase tracking-widest truncate">{d.name}</span>
+                    </div>
+                    <p className="text-lg font-bold text-white pl-4 group-hover/item:text-google-blue transition-colors leading-none">{d.value}</p>
+                  </div>
+                ))}
               </div>
             </GoogleCard>
 
-            <div className="flex flex-col justify-center space-y-12 h-full">
+            <div className="md:col-span-5 flex flex-col gap-10">
               {[
-                { l: "Critical Incursion Flux", v: (stats.risk_ratio?.toFixed(1) || "0.0") + "%", c: "text-google-red", bg: "hover:bg-google-red/5" },
-                { l: "Global Entropy Baseline", v: stats.avg_entropy?.toFixed(2) || "0.00", c: "text-white", bg: "hover:bg-white/[0.03]" }
+                {
+                  l: "Critical Incursion Flux",
+                  v: (stats.risk_ratio?.toFixed(1) || "0.0") + "%",
+                  c: "text-google-red",
+                  bg: "hover:bg-google-red/[0.03]",
+                  d: "Delta from cluster baseline ops.",
+                  s: "High Precision Analysis"
+                },
+                {
+                  l: "Global Entropy Baseline",
+                  v: stats.avg_entropy?.toFixed(2) || "0.00",
+                  c: "text-white",
+                  bg: "hover:bg-white/[0.02]",
+                  d: "Mean bit-variability across assets.",
+                  s: "Institutional Metadata"
+                }
               ].map(s => (
-                <div key={s.l} className={`p-20 bg-white/[0.01] rounded-[72px] border border-white/5 space-y-8 group transition-all duration-700 shadow-2xl h-[330px] flex flex-col justify-center ${s.bg}`}>
-                  <p className="text-[12px] font-black text-white/20 uppercase tracking-[0.6em] group-hover:translate-x-2 transition-transform">{s.l}</p>
-                  <p className={`text-9xl font-black tracking-tighter leading-none ${s.c}`}>{s.v}</p>
+                <div key={s.l} className={`p-12 bg-white/[0.01] rounded-[48px] border border-white/5 space-y-6 group transition-all duration-700 shadow-xl h-[295px] flex flex-col justify-between ${s.bg}`}>
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <p className="text-[11px] font-black text-white/20 uppercase tracking-[0.4em] group-hover:text-google-blue/40 transition-colors leading-none">{s.l}</p>
+                      <p className="text-[9px] font-bold text-white/10 uppercase tracking-widest leading-none mt-1.5">{s.s}</p>
+                    </div>
+                    <div className="p-2 bg-white/5 rounded-xl">
+                      <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-google-blue transition-colors" />
+                    </div>
+                  </div>
+
+                  <div className="relative">
+                    <p className={`text-6xl font-black tracking-tighter leading-none group-hover:scale-[1.02] transition-transform duration-700 ${s.c}`}>{s.v}</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                      <motion.div initial={{ width: 0 }} animate={{ width: '40%' }} className={`h-full ${s.c.replace('text-', 'bg-')}/40`} />
+                    </div>
+                    <p className="text-[9px] font-bold text-white/20 uppercase tracking-[0.25em]">{s.d}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+
+          <GoogleCard className="p-10 bg-gradient-to-r from-google-blue/5 to-transparent border-white/5 rounded-[40px] flex items-center justify-between">
+            <div className="flex items-center space-x-8">
+              <div className="w-16 h-16 rounded-[24px] bg-google-blue/10 flex items-center justify-center border border-google-blue/20">
+                <Database className="w-8 h-8 text-google-blue stroke-[1.5px]" />
+              </div>
+              <div className="space-y-2">
+                <p className="text-xl font-bold text-white tracking-tight">Institutional Archive Sync</p>
+                <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">Node-20X94 Persistence Cluster Online</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-6 text-right pr-6">
+              <div className="hidden sm:block space-y-1">
+                <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Registry Latency</p>
+                <p className="text-sm font-bold text-google-green">2.4ms</p>
+              </div>
+              <div className="w-px h-10 bg-white/10" />
+              <div className="space-y-1">
+                <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Vault Status</p>
+                <p className="text-sm font-bold text-white/40 uppercase tracking-tighter leading-none">Healthy</p>
+              </div>
+            </div>
+          </GoogleCard>
         </div>
       </Modal>
 
@@ -484,7 +573,6 @@ function App() {
       <AnimatePresence>
         {toast && (
           <motion.div initial={{ opacity: 0, y: 100, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }} className={`fixed bottom-20 left-1/2 -translate-x-1/2 z-[200] px-16 py-8 rounded-[48px] border flex items-center space-x-10 shadow-[0_60px_150px_-30px_rgba(0,0,0,1)] backdrop-blur-[60px] ${toast.type === 'danger' ? 'bg-google-red/90 border-white/20' : toast.type === 'success' ? 'bg-google-green/90 border-white/20' : 'bg-google-blue/90 border-white/20'}`}>
-            {/* Using motion explicitly here */}
             <div className="w-14 h-14 bg-white/20 rounded-3xl flex items-center justify-center shadow-inner">
               {toast.type === 'danger' ? <AlertIcon className="w-8 h-8 text-white" /> : <ShieldCheck className="w-8 h-8 text-white" />}
             </div>
