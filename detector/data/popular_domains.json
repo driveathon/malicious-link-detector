@@ -1,16 +1,24 @@
 {
   "popular_domains": [
     "google.com",
-    "apple.com",
     "facebook.com",
     "amazon.com",
+    "apple.com",
     "microsoft.com",
     "netflix.com",
     "twitter.com",
-    "instagram.com",
     "linkedin.com",
-    "youtube.com",
+    "instagram.com",
+    "bankofamerica.com",
+    "chase.com",
+    "wellsfargo.com",
     "paypal.com",
-    "ebay.com"
+    "citibank.com",
+    "dropbox.com",
+    "github.com",
+    "adobe.com",
+    "zoom.us",
+    "slack.com",
+    "salesforce.com"
   ]
 }

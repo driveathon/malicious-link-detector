@@ -1,0 +1,2 @@
+[console_scripts]
+malicious-detector = detector.cli:main

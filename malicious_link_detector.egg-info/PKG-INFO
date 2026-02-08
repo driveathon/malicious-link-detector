@@ -1,0 +1,72 @@
+Metadata-Version: 2.4
+Name: malicious_link_detector
+Version: 1.0.0
+Summary: Advanced Malicious Link Detector using heuristics and visual AI
+Author-email: Admin <admin@example.com>
+Project-URL: Homepage, https://github.com/driveathon/malicious-link-detector
+Project-URL: Bug Tracker, https://github.com/driveathon/malicious-link-detector/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Security
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: aiohttp
+Requires-Dist: requests
+Requires-Dist: python-whois
+Requires-Dist: playwright
+Requires-Dist: fastapi
+Requires-Dist: uvicorn
+Requires-Dist: python-multipart
+Requires-Dist: pydantic
+
+# Malicious Link Detector
+
+A simple Python library and CLI tool to detect potentially malicious URLs using heuristics like Punycode detection, typosquatting checks, and entropy analysis.
+
+## Features
+
+- **Punycode Detection**: Flags IDN homograph attacks (e.g., `xn--...`).
+- **Typosquatting Check**: Detects URLs that visually resemble popular domains (e.g., `g00gle.com` vs `google.com`) using Levenshtein distance.
+- **Entropy Analysis**: Measures domain name randomness to help identify Domain Generation Algorithms (DGA).
+- **Structure Analysis**: Checks for suspicious elements like UserInfo (`@`) in the domain or excessive subdomains.
+
+## Installation
+
+Clone the repository and install dependencies (none required for core logic, uses standard library).
+
+```bash
+git clone <your-repo-url>
+cd malicious_link_detector
+```
+
+## Usage
+
+### CLI
+
+Scan a single URL:
+```bash
+python -m detector.cli --url "https://g00gle.com"
+```
+
+Scan a file of URLs:
+```bash
+python -m detector.cli --file urls.txt
+```
+
+### Python API
+
+```python
+from detector import scan_link
+
+report = scan_link("https://g00gle.com")
+if report["is_malicious"]:
+    print(f"Suspicious: {report['reasons']}")
+```
+
+## Running Tests
+
+```bash
+$env:PYTHONPATH += ";."
+python tests/test_core.py
+```

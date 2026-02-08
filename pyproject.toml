@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "malicious_link_detector"
+version = "1.0.0"
+authors = [
+  { name="Admin", email="admin@example.com" },
+]
+description = "Advanced Malicious Link Detector using heuristics and visual AI"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Security",
+]
+dependencies = [
+    "aiohttp",
+    "requests",
+    "python-whois",
+    "playwright",
+    "fastapi",
+    "uvicorn",
+    "python-multipart",
+    "pydantic",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/driveathon/malicious-link-detector"
+"Bug Tracker" = "https://github.com/driveathon/malicious-link-detector/issues"
+
+[project.scripts]
+malicious-detector = "detector.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["detector*"]
+
+[tool.setuptools.package-data]
+detector = ["data/*.json"]

@@ -1,0 +1,8 @@
+aiohttp
+requests
+python-whois
+playwright
+fastapi
+uvicorn
+python-multipart
+pydantic
