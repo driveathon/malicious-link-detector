@@ -1,4 +1,4 @@
-from .core import analyze_url_async, analyze_url_heuristics
+from .core import analyze_url_heuristics, scan_link_sync
 from .scanner import Scanner
 from .database import ScanCache
 import json
@@ -10,7 +10,10 @@ POPULAR_DOMAINS_PATH = os.path.join(os.path.dirname(__file__), 'data', 'popular_
 def load_popular_domains():
     if os.path.exists(POPULAR_DOMAINS_PATH):
         with open(POPULAR_DOMAINS_PATH, 'r') as f:
-            return json.load(f).get("popular_domains", [])
+            data = json.load(f)
+            if isinstance(data, list):
+                return data
+            return data.get("popular_domains", [])
     return []
 
 def scan_link(url, trace_redirects=True, check_whois=True, check_intel=True, check_ssl=True, check_visual=True, google_api_key=None, vt_api_key=None):

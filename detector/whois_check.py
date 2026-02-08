@@ -1,27 +1,30 @@
-import whois
+import requests as sync_requests
 from datetime import datetime, timezone
 import logging
 
 def get_domain_age_days(domain):
-    """Retrieve the age of a domain in days using WHOIS data."""
+    """Retrieve the age of a domain in days using a subprocess-free method."""
+    # We'll use a public RDAP API which is HTTPS based and doesn't need subprocesses
+    # This is much safer for Windows asyncio loops
     try:
-        w = whois.whois(domain)
-        creation_date = w.creation_date
-        
-        # creation_date can be a single datetime object or a list
-        if isinstance(creation_date, list):
-            creation_date = creation_date[0]
-            
-        if creation_date:
-            # Handle timezone awareness
-            now = datetime.now()
-            if creation_date.tzinfo is not None:
-                now = datetime.now(creation_date.tzinfo)
-                
-            age = now - creation_date
-            return age.days
+        url = f"https://rdap.org/domain/{domain}"
+        resp = sync_requests.get(url, timeout=5)
+        if resp.status_code == 200:
+            data = resp.json()
+            events = data.get("events", [])
+            for event in events:
+                if event.get("eventAction") == "registration":
+                    date_str = event.get("eventDate")
+                    if date_str:
+                        # RDAP dates are usually ISO8601
+                        # Remove 'Z' for parsing if present
+                        if date_str.endswith('Z'):
+                            date_str = date_str[:-1]
+                        creation_date = datetime.fromisoformat(date_str)
+                        age = datetime.utcnow() - creation_date
+                        return age.days
     except Exception as e:
-        logging.error(f"WHOIS lookup failed for {domain}: {e}")
+        logging.error(f"RDAP lookup failed for {domain}: {e}")
         
     return None
 

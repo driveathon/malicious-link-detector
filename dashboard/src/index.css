@@ -1,39 +1,140 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  body {
-    @apply bg-background text-white font-sans antialiased overflow-x-hidden;
+/* 
+  Material Design 3 / Google Enterprise Theme
+  Tailwind v4 Modern Configuration
+*/
+
+@theme {
+  /* Google Core Colors */
+  --color-google-blue: #4285F4;
+  --color-google-red: #EA4335;
+  --color-google-yellow: #FBBC05;
+  --color-google-green: #34A853;
+
+  /* Surface System */
+  --color-fintech-obsidian: #0e0e0e;
+  --color-fintech-charcoal: #171717;
+  --color-fintech-surface: #202124;
+  --color-fintech-slate: #9AA0A6;
+
+  /* Brand Mapping */
+  --color-fintech-cobalt: #4285F4;
+  --color-fintech-emerald: #34A853;
+  --color-fintech-crimson: #EA4335;
+  --color-fintech-amber: #FBBC05;
+
+  /* Elevation */
+  --shadow-google-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+  --shadow-google-2: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-google-3: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: #000;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #E8EAED;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+@layer components {
+  .google-card {
+    @apply bg-[#171717] border border-white/5 rounded-[28px] overflow-hidden transition-all duration-300;
+    box-shadow: var(--shadow-google-1);
+  }
+
+  .google-card:hover {
+    @apply border-white/10;
+    box-shadow: var(--shadow-google-2);
+  }
+
+  .google-input {
+    @apply bg-[#202124] border border-white/10 rounded-[32px] px-10 py-6 text-xl outline-none focus:ring-4 focus:ring-google-blue/10 focus:border-google-blue transition-all placeholder:text-white/10;
+  }
+
+  .google-btn-primary {
+    @apply bg-google-blue hover:bg-[#5a95f5] text-white px-10 py-4 rounded-full font-bold tracking-tight transition-all active:scale-95;
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+  }
+
+  .google-btn-outline {
+    @apply border border-white/10 hover:bg-white/5 text-[#E8EAED] px-6 py-2.5 rounded-full font-bold text-[11px] uppercase tracking-widest transition-all;
   }
 }
 
-.glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
 }
 
-.glow {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.glow-danger {
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
-.glow-success {
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* Custom animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
+  animation: fade-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.google-blur-bg {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000 100%);
+  z-index: -1;
+}
+
+/* Typography Overrides */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+}
+
+mono {
+  font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
 }

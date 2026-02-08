@@ -26,6 +26,8 @@ dependencies = [
     "uvicorn",
     "python-multipart",
     "pydantic",
+    "slowapi",
+    "fpdf2"
 ]
 
 [project.urls]
